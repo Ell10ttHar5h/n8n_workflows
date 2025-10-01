@@ -1,0 +1,210 @@
+{
+  "name": "site_deploy001",
+  "nodes": [
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "011ef39d-47ea-42f6-b346-88cf3d363345",
+              "name": "resumesitewamp",
+              "value": "C:/wamp64/www/resume_site/resume/**",
+              "type": "string"
+            },
+            {
+              "id": "572516c3-006d-46ff-8a8c-46fafa0e65fa",
+              "name": "resumesitegithub",
+              "value": "E:/projects/github/resume_website/resume/",
+              "type": "string"
+            },
+            {
+              "id": "2deae051-bfc9-4f68-a7a4-9798d78c6edc",
+              "name": "gitrepo",
+              "value": "E:/projects/github/resume_website/",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        208,
+        272
+      ],
+      "id": "e1f897d1-98d1-431f-bbf3-04515a646c36",
+      "name": "env_config"
+    },
+    {
+      "parameters": {
+        "fileSelector": "={{ $json.resumesitewamp }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.readWriteFile",
+      "typeVersion": 1,
+      "position": [
+        400,
+        272
+      ],
+      "id": "42656eb4-1ebf-4581-ac5d-800c3676d999",
+      "name": "wamp_read_files"
+    },
+    {
+      "parameters": {
+        "operation": "write",
+        "fileName": "={{ $('env_config').item.json.resumesitegithub }}{{ $json.fileName }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.readWriteFile",
+      "typeVersion": 1,
+      "position": [
+        624,
+        272
+      ],
+      "id": "abc4f961-1127-4be5-8153-175bfa363ad9",
+      "name": "github_deploy_files"
+    },
+    {
+      "parameters": {
+        "operation": "add",
+        "repositoryPath": "={{ $('env_config').item.json.gitrepo }}",
+        "pathsToAdd": "={{ $('env_config').item.json.resumesitegithub }}**"
+      },
+      "type": "n8n-nodes-base.git",
+      "typeVersion": 1,
+      "position": [
+        848,
+        272
+      ],
+      "id": "2b205272-552e-4b7e-b0b4-517572bae294",
+      "name": "git_add"
+    },
+    {
+      "parameters": {
+        "operation": "commit",
+        "repositoryPath": "={{ $('env_config').item.json.gitrepo }}",
+        "message": "=resumesite_{{ $now }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.git",
+      "typeVersion": 1,
+      "position": [
+        1056,
+        272
+      ],
+      "id": "bf6a05f9-73af-4d0b-954e-6e1928c515d5",
+      "name": "git_commit"
+    },
+    {
+      "parameters": {
+        "operation": "push",
+        "repositoryPath": "={{ $('env_config').item.json.gitrepo }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.git",
+      "typeVersion": 1,
+      "position": [
+        1264,
+        272
+      ],
+      "id": "acdaf46a-cd8b-4afa-b9b4-77a5eaebb436",
+      "name": "gihub_push"
+    },
+    {
+      "parameters": {
+        "triggerOn": "file",
+        "path": "C:/wamp64/www/resume_site/resume/readme.md",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.localFileTrigger",
+      "typeVersion": 1,
+      "position": [
+        32,
+        272
+      ],
+      "id": "b9059cfe-a43e-4dfe-abfe-d28150aa1a7a",
+      "name": "wamp_readme_trigger"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "env_config": {
+      "main": [
+        [
+          {
+            "node": "wamp_read_files",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "wamp_read_files": {
+      "main": [
+        [
+          {
+            "node": "github_deploy_files",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "github_deploy_files": {
+      "main": [
+        [
+          {
+            "node": "git_add",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "git_add": {
+      "main": [
+        [
+          {
+            "node": "git_commit",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "git_commit": {
+      "main": [
+        [
+          {
+            "node": "gihub_push",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "wamp_readme_trigger": {
+      "main": [
+        [
+          {
+            "node": "env_config",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "b5e950bb-b6c5-4fd3-8233-6b585f20cedd",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "63ae5b4c70b224fb791221fdd388ca8a66d3ddeb95fb19ac6a7f7a96c0656790"
+  },
+  "id": "HJUYbLspIlocg59y",
+  "tags": []
+}

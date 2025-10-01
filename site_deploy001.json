@@ -30,7 +30,7 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        208,
+        192,
         272
       ],
       "id": "e1f897d1-98d1-431f-bbf3-04515a646c36",
@@ -74,8 +74,8 @@
       "type": "n8n-nodes-base.git",
       "typeVersion": 1,
       "position": [
-        848,
-        272
+        160,
+        480
       ],
       "id": "2b205272-552e-4b7e-b0b4-517572bae294",
       "name": "git_add"
@@ -90,26 +90,11 @@
       "type": "n8n-nodes-base.git",
       "typeVersion": 1,
       "position": [
-        1056,
-        272
+        368,
+        480
       ],
       "id": "bf6a05f9-73af-4d0b-954e-6e1928c515d5",
       "name": "git_commit"
-    },
-    {
-      "parameters": {
-        "operation": "push",
-        "repositoryPath": "={{ $('env_config').item.json.gitrepo }}",
-        "options": {}
-      },
-      "type": "n8n-nodes-base.git",
-      "typeVersion": 1,
-      "position": [
-        1264,
-        272
-      ],
-      "id": "acdaf46a-cd8b-4afa-b9b4-77a5eaebb436",
-      "name": "gihub_push"
     },
     {
       "parameters": {
@@ -120,11 +105,26 @@
       "type": "n8n-nodes-base.localFileTrigger",
       "typeVersion": 1,
       "position": [
-        32,
+        16,
         272
       ],
       "id": "b9059cfe-a43e-4dfe-abfe-d28150aa1a7a",
       "name": "wamp_readme_trigger"
+    },
+    {
+      "parameters": {
+        "operation": "push",
+        "repositoryPath": "={{ $('env_config').item.json.gitrepo }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.git",
+      "typeVersion": 1,
+      "position": [
+        576,
+        480
+      ],
+      "id": "acdaf46a-cd8b-4afa-b9b4-77a5eaebb436",
+      "name": "github_push"
     }
   ],
   "pinData": {},
@@ -177,7 +177,7 @@
       "main": [
         [
           {
-            "node": "gihub_push",
+            "node": "github_push",
             "type": "main",
             "index": 0
           }
@@ -200,7 +200,7 @@
   "settings": {
     "executionOrder": "v1"
   },
-  "versionId": "b5e950bb-b6c5-4fd3-8233-6b585f20cedd",
+  "versionId": "f0a3738a-7925-4c11-b58f-c441f40730f5",
   "meta": {
     "templateCredsSetupCompleted": true,
     "instanceId": "63ae5b4c70b224fb791221fdd388ca8a66d3ddeb95fb19ac6a7f7a96c0656790"
